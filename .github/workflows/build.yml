@@ -1,0 +1,64 @@
+name: Build Plan Desk
+
+# Every push to main builds a new Windows installer and publishes it as a GitHub Release.
+# The app checks this Release for updates; the commit message becomes the "What's new" text.
+on:
+  push:
+    branches: [main]
+    paths-ignore: ['**.md']
+  workflow_dispatch:
+
+permissions:
+  contents: write
+
+concurrency:
+  group: build
+  cancel-in-progress: false
+
+jobs:
+  windows:
+    runs-on: windows-latest
+    outputs:
+      version: ${{ steps.v.outputs.version }}
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 20
+      - id: v
+        shell: bash
+        run: echo "version=1.0.${{ github.run_number }}" >> "$GITHUB_OUTPUT"
+      - name: Install
+        run: npm install --no-audit --no-fund
+      - name: Set version
+        run: npm version ${{ steps.v.outputs.version }} --no-git-tag-version --allow-same-version
+      - name: Check the app code
+        run: node scripts/check.js
+      - name: Build installer
+        run: npm run build:win
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+      - uses: actions/upload-artifact@v4
+        with:
+          name: windows
+          path: |
+            dist/*.exe
+            dist/*.blockmap
+            dist/latest.yml
+
+  release:
+    needs: windows
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/download-artifact@v4
+        with:
+          path: out
+          merge-multiple: true
+      - name: Publish release
+        uses: softprops/action-gh-release@v2
+        with:
+          tag_name: v${{ needs.windows.outputs.version }}
+          name: Plan Desk ${{ needs.windows.outputs.version }}
+          body: ${{ github.event.head_commit.message || 'New version' }}
+          make_latest: true
+          files: out/*

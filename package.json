@@ -1,0 +1,46 @@
+{
+  "name": "plan-desk",
+  "productName": "Plan Desk",
+  "version": "1.0.0",
+  "description": "Drawing review, markups and takeoffs for PDF drawings",
+  "author": "Muhammad Usama Amini",
+  "license": "UNLICENSED",
+  "private": true,
+  "main": "electron/main.js",
+  "scripts": {
+    "vendor": "node scripts/vendor.js",
+    "start": "npm run vendor && electron .",
+    "build:win": "npm run vendor && electron-builder --win --publish never"
+  },
+  "dependencies": {
+    "electron-updater": "6.1.7"
+  },
+  "devDependencies": {
+    "electron": "33.2.1",
+    "electron-builder": "24.13.3",
+    "pdf-lib": "1.17.1",
+    "pdfjs-dist": "6.2.108"
+  },
+  "build": {
+    "appId": "com.usama.plandesk",
+    "productName": "Plan Desk",
+    "directories": { "output": "dist" },
+    "files": ["electron/**", "www/**", "assets/icon.png", "package.json"],
+    "win": {
+      "target": [{ "target": "nsis", "arch": ["x64"] }],
+      "icon": "assets/icon.png",
+      "artifactName": "Plan-Desk-Setup-${version}.${ext}"
+    },
+    "nsis": {
+      "oneClick": false,
+      "perMachine": false,
+      "allowToChangeInstallationDirectory": true,
+      "createDesktopShortcut": true,
+      "shortcutName": "Plan Desk"
+    },
+    "fileAssociations": [
+      { "ext": "pdf", "name": "PDF Drawing", "description": "PDF drawing", "role": "Editor" }
+    ],
+    "publish": [{ "provider": "github", "owner": "muhammadusamaamini-ux", "repo": "Plan-Desk", "releaseType": "release" }]
+  }
+}

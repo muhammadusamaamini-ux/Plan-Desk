@@ -1,0 +1,89 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<title>Plan Desk</title>
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<link rel="stylesheet" href="css/app.css">
+<script src="lib/pdf-lib.min.js"></script>
+</head>
+<body>
+<div id="app">
+  <header id="topbar">
+    <div class="brand"><img src="icon.png" alt=""><span>Plan Desk</span></div>
+    <nav id="menus"></nav>
+    <div class="quick">
+      <button class="qbtn" data-act="file.open" title="Open"></button>
+      <button class="qbtn" data-act="file.save" title="Save"></button>
+      <button class="qbtn" data-act="edit.undo" title="Undo"></button>
+      <button class="qbtn" data-act="edit.redo" title="Redo"></button>
+    </div>
+    <div class="spacer"></div>
+    <div id="updateChip" class="chip hidden"></div>
+  </header>
+  <div id="toolbar"></div>
+  <div id="main">
+    <aside id="left" class="panel">
+      <div class="ptabs">
+        <button data-tab="thumbs" class="on">Pages</button>
+        <button data-tab="bookmarks">Bookmarks</button>
+        <button data-tab="search">Search</button>
+        <button data-tab="mytools">My Tools</button>
+      </div>
+      <div class="pbody" id="leftBody"></div>
+    </aside>
+    <div class="splitter" data-split="left"></div>
+    <section id="center">
+      <div id="doctabs"></div>
+      <div id="viewport" tabindex="0">
+        <canvas id="pdfc"></canvas>
+        <canvas id="inkc"></canvas>
+        <div id="welcome">
+          <img src="icon.png" alt="">
+          <h1>Plan Desk</h1>
+          <p>Open a PDF drawing to review, mark up and measure.</p>
+          <button class="primary" data-act="file.open">Open drawings…</button>
+          <p class="hint">or drag PDF files here</p>
+          <div id="recent"></div>
+        </div>
+      </div>
+      <div class="splitter h" data-split="bottom"></div>
+      <section id="bottom" class="panel"></section>
+    </section>
+    <div class="splitter" data-split="right"></div>
+    <aside id="right" class="panel"><div class="pbody" id="rightBody"></div></aside>
+  </div>
+  <footer id="status">
+    <div class="grp">
+      <button data-act="view.firstpage" title="First page">⏮</button>
+      <button data-act="view.prevpage" title="Previous page">◀</button>
+      <input id="pageInput" value="" size="4"> <span id="pageCount">/ 0</span>
+      <button data-act="view.nextpage" title="Next page">▶</button>
+      <button data-act="view.lastpage" title="Last page">⏭</button>
+    </div>
+    <div class="grp">
+      <button data-act="view.zoomout" title="Zoom out">−</button>
+      <input id="zoomInput" value="100%" size="5">
+      <button data-act="view.zoomin" title="Zoom in">+</button>
+      <button data-act="view.fitpage" title="Fit page">Fit</button>
+      <button data-act="view.fitwidth" title="Fit width">Width</button>
+      <button data-act="view.mode" id="modeBtn" title="Continuous or single page">Continuous</button>
+    </div>
+    <div id="statusMsg"></div>
+    <div class="spacer"></div>
+    <div class="grp">
+      <span id="cursorInfo"></span>
+      <button id="scaleBtn" data-act="scale.dialog" title="Page scale">Scale: not set</button>
+      <button id="snapBtn" data-act="toggle.snap" class="tog on" title="Snap to drawing lines (F3)">Snap</button>
+      <button id="orthoBtn" data-act="toggle.ortho" class="tog" title="Ortho — straight horizontal/vertical lines (F8). Hold Shift for 45° steps.">Ortho</button>
+    </div>
+  </footer>
+</div>
+<div id="menuLayer"></div>
+<div id="modalLayer"></div>
+<div id="toasts"></div>
+<textarea id="textEditor" spellcheck="true"></textarea>
+<div id="dropHint">Drop PDF drawings to open</div>
+<script type="module" src="js/app.js"></script>
+</body>
+</html>
