@@ -199,7 +199,7 @@ function wirePrecision(body, sc) {
     const want = $$('option', $('#sPrec', body)).find(o => o.value === cur) ? cur : (u === 'ftin' ? '16' : u === 'm' ? '2' : u === 'mm' ? '0' : '2');
     $('#sPrec', body).value = want;
   };
-  $('#sUnit', body).addEventListener('change', fill);
+  $('#sUnit', body).addEventListener('change', () => { const u = $('#sUnit', body).value; $('#sPrec', body).value = ''; sc = { ...sc, precision: u === 'ftin' ? 16 : u === 'mm' ? 0 : u === 'cm' ? 1 : 2 }; fill(); });
   fill();
 }
 function applyTargets(body, page, d) {
