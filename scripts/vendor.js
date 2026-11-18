@@ -13,8 +13,8 @@ function copyFirst(dest, candidates) {
   fs.copyFileSync(hit, path.join(lib, dest));
   console.log('lib/' + dest + '  <-  ' + path.relative(root, hit));
 }
-copyFirst('pdf.mjs', ['pdfjs-dist/legacy/build/pdf.min.mjs', 'pdfjs-dist/legacy/build/pdf.mjs']);
-copyFirst('pdf.worker.mjs', ['pdfjs-dist/legacy/build/pdf.worker.min.mjs', 'pdfjs-dist/legacy/build/pdf.worker.mjs']);
+copyFirst('pdf.js', ['pdfjs-dist/legacy/build/pdf.min.mjs', 'pdfjs-dist/legacy/build/pdf.mjs']);
+copyFirst('pdf.worker.js', ['pdfjs-dist/legacy/build/pdf.worker.min.mjs', 'pdfjs-dist/legacy/build/pdf.worker.mjs']);
 copyFirst('pdf-lib.min.js', ['pdf-lib/dist/pdf-lib.min.js']);
 // fonts and character maps so every drawing's text shows correctly offline
 for (const dir of ['cmaps', 'standard_fonts', 'wasm', 'iccs']) {

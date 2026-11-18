@@ -147,7 +147,7 @@ export function cloudCmds(pts, arcSize) {
       const c = mid(p0, p1), r = dist(p0, p1) / 2;
       const ang = Math.atan2(p0[1] - c[1], p0[0] - c[0]);
       // sweep 180° going outward (counter-clockwise on screen for a clockwise polygon)
-      out.push(...arcCmds(c[0], c[1], r, ang, ang - Math.PI, first));
+      out.push(...arcCmds(c[0], c[1], r, ang, ang + Math.PI, first));
       first = false;
     }
   }

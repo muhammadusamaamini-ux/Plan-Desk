@@ -1,5 +1,5 @@
 // Plan Desk — main window: documents, viewer, tools and commands
-import * as pdfjsLib from '../lib/pdf.mjs';
+import * as pdfjsLib from '../lib/pdf.js';
 import * as G from './geom.js';
 import * as MK from './markups.js';
 import * as U from './units.js';
@@ -11,7 +11,7 @@ import { $, $$, esc, toast, modal, ask, prompt, showMenu, closeMenus, modalOpen 
 import * as P from './panels.js';
 import * as D from './features.js';
 
-pdfjsLib.GlobalWorkerOptions.workerSrc = new URL('../lib/pdf.worker.mjs', import.meta.url).href;
+pdfjsLib.GlobalWorkerOptions.workerSrc = new URL('../lib/pdf.worker.js', import.meta.url).href;
 const LIB = new URL('../lib/', import.meta.url).href;
 export const desk = window.desk || null; // the Windows app bridge (missing when opened in a plain browser)
 
@@ -585,6 +585,7 @@ export function newMarkup(type, page, pts, extra = {}) {
   return m;
 }
 function addMarkup(m) {
+  $('#cursorInfo').textContent = '';
   change(d => { d.markups.push(m); d.sel = new Set([m.id]); });
   if (S.settings.returnToSelect && S.tool !== 'count') setTool('select');
 }
@@ -620,6 +621,7 @@ function hintFor(id) {
 export function cancelDraft() {
   if (S.draft && S.draft._countLive) { S.draft = null; }
   S.draft = null; S.snapHit = null;
+  $('#cursorInfo').textContent = '';
   if (ptr && ptr.mode === 'tool') ptr = null;
   requestRender();
 }
@@ -1132,7 +1134,7 @@ export async function run(id) {
     case 'view.lastpage': if (d) goToPage(d.pages.length - 1); break;
     case 'view.goto': if (d) { const v = await prompt('Go to page', 'Page number (1–' + d.pages.length + ')', String(currentPage() + 1)); if (v) goToPage(Number(v) - 1); } break;
     case 'view.mode': if (d) { const pg = currentPage(); d.mode = d.mode === 'single' ? 'continuous' : 'single'; d.cur = pg; fitPage(pg); updateStatus(); } break;
-    case 'view.find': setPanel('left', true); P.showLeftTab('search'); setTimeout(() => { const i = $('#searchInput'); if (i) { i.focus(); i.select(); } }, 30); break;
+    case 'view.find': { setPanel('left', true); P.showLeftTab('search'); const i = $('#searchInput'); if (i) { i.focus(); i.select(); } break; }
     case 'view.bookmark': if (d) P.addBookmarkHere(); break;
     case 'panel.left': setPanel('left', !S.settings.leftOn); break;
     case 'panel.right': setPanel('right', !S.settings.rightOn); break;

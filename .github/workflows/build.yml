@@ -54,11 +54,18 @@ jobs:
         with:
           path: out
           merge-multiple: true
+      - name: What's new text (commit message without sign-off lines)
+        env:
+          MSG: ${{ github.event.head_commit.message }}
+        run: |
+          printf '%s\n' "$MSG" | grep -v -E '^(Co-Authored-By|Claude-Session|Signed-off-by):' | sed -e :a -e '/^\n*$/{$d;N;ba' -e '}' > notes.txt
+          [ -s notes.txt ] || echo 'Improvements and fixes.' > notes.txt
+          cat notes.txt
       - name: Publish release
         uses: softprops/action-gh-release@v2
         with:
           tag_name: v${{ needs.windows.outputs.version }}
           name: Plan Desk ${{ needs.windows.outputs.version }}
-          body: ${{ github.event.head_commit.message || 'New version' }}
+          body_path: notes.txt
           make_latest: true
           files: out/*
